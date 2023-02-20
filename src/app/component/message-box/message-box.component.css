@@ -1,0 +1,10 @@
+div{
+    color: rgb(95, 95, 95)!important;
+}
+.btn-light{
+    border-color: aqua;
+    color: aqua;
+}
+.btn:hover{
+    border-color: aliceblue;
+}

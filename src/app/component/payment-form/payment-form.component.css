@@ -1,0 +1,86 @@
+.icon-height{
+    height: fit-content;
+}
+.align-text{
+    position: relative;
+    top:-8px;
+}
+.border-bottom{
+    border-bottom: 1px solid rgb(170, 170, 170) !important;
+}
+.border-right{
+    border-right: 1px solid rgb(170, 170, 170);
+    
+}
+.mat-mdc-form-field {
+    margin-top: 16px;
+  }
+.input-box{
+    position: relative;
+    margin: 15px;
+    top: 7px;
+    padding-left: 5px;
+    height: 30px;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 2px;
+    z-index: 1;
+}
+label{
+    margin-top: 25px;
+}
+.next-btn{
+    margin-left: -36px;
+}
+.icon-align{
+    border: 1px solid black; top: 22px; right: 8px; height: 32px; position: relative;
+
+}
+.placeholder-align{
+    padding-top:4px;
+    padding-left: 5px;
+}
+.dropdown-input{
+    width: 100%;
+    border: 1px solid black;
+    top: 22px;
+    height: 25px;
+    position: relative;
+}
+.sidenav-header{
+    background-color: rgb(170, 170, 170);
+}
+.search-box{
+    position: relative;
+    padding-left:5px;
+    margin: 15px;
+    height: 30px;
+    width: 90%;
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 3px;
+    z-index: 1;
+}
+.review-panel{
+    border: 1px solid rgb(170, 170, 170);
+}
+.submit-align{
+    position: relative;
+    left:-40px;
+}
+::ng-deep .mat-stepper-horizontal-line{
+    /* display: none; */
+}
+@include styleStepLine($index) {
+    .mat-horizontal-stepper-header {
+        &+.mat-stepper-horizontal-line:nth-child(#{$index}) {
+            height: 2px;
+            background-image: linear-gradient(to right, #00b495, #00aeea);
+        }
+    }
+}
+
+@media (max-width:605px) {
+    .next-btn{
+        margin-left: 0px;
+    }
+}

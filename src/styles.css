@@ -1,0 +1,159 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.toolbar{
+    
+    justify-content: space-between;
+}
+
+/* .profile{
+    padding-top: 0px;
+    padding-left: 25px;
+}
+
+
+.example-headers-align{
+    width: 50px;
+
+}
+.adj{
+    height: 20px;
+    margin-top: 20px;
+    color: aliceblue;
+} */
+.profile-img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.list{
+    list-style-type: none;
+  margin-bottom: -1px;
+  padding: 0;
+  overflow: hidden;
+}
+li{
+    display: block;
+  color: white;
+  text-align: center;
+  padding-left: 25px;
+  text-decoration: none;
+  float: left;
+}
+mat-sidenav-container{
+    height: 100%;
+}
+.mainBox{
+    
+    background-color: rgb(66, 66, 173);
+    overflow: hidden !important;
+}
+.box{
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background-color: white;
+}
+mat-grid-tile{
+    margin: 0px 10px 0px 2px;
+}
+.tile{
+    background-color: aliceblue;
+    width: 92%;
+    height: 100px;
+    padding: 20px 15px;
+    border: 1px solid rgb(94, 172, 245);
+    border-radius: 5px;
+    text-align: left;
+    color: black
+
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+h2{
+    font-weight: 100;
+}
+.tile:hover{
+    background-color: rgb(66, 66, 173);
+    color: white;
+}
+.active{
+    background-color: rgb(66, 66, 173);
+    color: white;
+}
+.mat-icon{
+    /* margin-top: 25px; */
+    overflow: visible;
+    font-weight: 100;
+}
+.accounts{
+   width: 100%;
+}
+.tile-icon{
+    margin-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 20px;
+    padding-top: 15px;
+}
+.value{
+    margin-top: 20px;
+}
+.values{
+    margin-bottom: 20px;
+}
+.search{
+    border: 0.1vh solid black;
+    display: inline;
+}
+table {
+    width: 100%;
+    margin-left: -20px;
+}
+  
+th.mat-sort-header-sorted {
+    color: black;
+}
+.head:checked{
+    background-color: rgb(137, 137, 241);
+}
+/* .icon{
+    margin-bottom: 10px;
+} */
+.mat-expansion-panel-body {
+    padding: 31px 0px 16px 46px;
+}
+
+mat-icon{
+    cursor: pointer;
+}
+
+.warning{
+    background-color: rgb(180, 9, 9);
+    color: white;
+    
+ } 
+ .success{
+    background-color: rgb(12, 143, 12);
+    color: white;
+    
+ } 
+ .btn-primary{
+    background-color: #3f51b5;
+    border-color:unset !important;
+ }
+ .btn-primary:hover{
+    background-color: #4f63d1;
+    border-color:unset !important;
+ }
+ .btn-primary:disabled{
+    background-color: #697bdd;
+    border-color:unset !important;
+ }
+ .text-primary{
+    color: #3f51b5 !important;
+ }

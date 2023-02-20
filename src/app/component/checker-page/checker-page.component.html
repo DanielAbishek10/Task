@@ -1,0 +1,55 @@
+<div class=" border-bottom">
+    <div>
+        <p class="h6 text-primary" routerLink="/home" style="cursor: pointer;"> <mat-icon class="pt-3 icon-height">keyboard_arrow_left</mat-icon>
+            <span class="align-text">
+                go to back
+            </span></p>
+    </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div *ngIf="paymentDetail">
+                Hello
+                <div><b>{{paymentDetail.IFSCcode}}</b></div>
+                <div>{{paymentDetail.pay}}</div>
+                <div>{{paymentDetail.status}}</div>
+                <div class="row" *ngIf="isChecker">
+                    <div class="col-4">
+                        <button class="btn btn-danger my-2 px-4" (click)="updateStatus('ignored')">REJECT</button>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <button class="btn btn-success my-2 px-4" align="right" (click)="updateStatus('accepted')">VERIFY</button>
+                    </div>
+                </div>
+                <div class="review-panel">
+                    <div class="container">
+                        <div class="row pb-3">
+                            <div class="col-4">Execute from:</div>
+                            <div class="col-6">{{paymentDetail.place}}</div>
+                            <div class="col-2">{{paymentDetail.amount}} {{paymentDetail.currencyType}}</div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="col-4">Chared by:</div>
+                            <div class="col-6">{{paymentDetail.pay}}</div>
+                            <div class="col-2">{{paymentDetail.amount}} {{paymentDetail.currencyType}}</div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="col-4">Payment reason:</div>
+                            <div class="col-8">{{paymentDetail.paymentReason}}</div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="col-4">Payment type:</div>
+                            <div class="col-8">{{paymentDetail.paymentReason}}</div>
+                        </div>
+                    </div>
+                  </div>
+
+            </div>
+            
+        </div>
+        
+    </div>
+</div>

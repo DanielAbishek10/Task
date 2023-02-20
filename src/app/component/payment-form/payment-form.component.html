@@ -1,0 +1,176 @@
+<div class="pl-3 border-bottom">
+    <div>
+        <p class="h6 text-primary" routerLink="/home" style="cursor: pointer;"> <mat-icon class="pt-3 icon-height">keyboard_arrow_left</mat-icon>
+            <span class="align-text">
+                go to back
+            </span></p>
+    </div>
+
+</div>
+<div class="pl-3">
+    <div class="row">
+        <div class="col-8 border-right">
+            <mat-icon class="text-center text-primary" style="width: 100%;padding-top: 25px; height: 75px; font-size: xxx-large;">assignment_turned_in</mat-icon>
+            <h1 class="text-center">Pay someone</h1>
+            <mat-stepper labelPosition="bottom" #stepper>
+            <mat-step>
+              <form>
+                <ng-template matStepLabel>What </ng-template>
+                <mat-progress-bar mode="determinate" [value]="33" style="display:block;"></mat-progress-bar>
+                <p class="text-center">You can pay someone in 2 easy steps</p>
+                        <div class="row" [formGroup]="formGroup">
+
+                            <div class="col-3">
+                                <label for="">Pay To<span style="color: red;">*</span></label>                            
+                            </div>
+                            <div class="col-8">
+                                <span><input matInput placeholder="Enter or choose the credit account" class="input-box" #payInput (keyup)="payApiTrigger(payInput.value)" [matAutocomplete]="auto"  formControlName="pay">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option
+                                            *ngFor="let pay of listOfPay"
+                                            [value]="pay.userName+ '/' +pay.accountNo" >
+                                            <span>{{ pay.userName }} | {{ pay.accountNo }}</span>
+                                        </mat-option>
+                                        </mat-autocomplete>
+                                </span>
+                                
+                                
+                            </div>
+                            <div class="col-1" style="position: relative; right: 24px; z-index: 1;">
+                                <mat-icon matSuffix class="icon-align" (click)="sidenav.toggle()">keyboard_arrow_right</mat-icon>
+                            </div>
+                            <div class="col-3">
+                                <label for="">From <span style="color: red;">*</span></label>                            
+                            </div>
+                            <div class="col-8">
+                                <!-- <input matInput class="input-box" placeholder="Enter or choose the debit account" formControlName="from"> -->
+                                <mat-select placeholder="Chooce currency type" class="icon-align placeholder-align" style="left: 15px;" formControlName="from">
+                                    <mat-option [value]="currentUser.accountNo">{{currentUser.accountNo}}</mat-option>
+                                </mat-select>
+    
+                            </div>
+                            <div class="col-3">
+                                <label for="">Amount <span style="color: red;">*</span></label>                            
+                            </div>
+                            <div class="col-5">
+                                <input type="number" placeholder="Payment account" matInput class="input-box" formControlName="amount">
+                            </div>
+                            <div class="col-3">
+                                <mat-select placeholder="Chooce currency type" class="icon-align placeholder-align" style="left: 15px;" formControlName="currencyType">
+                                    <mat-option value="USD">USD</mat-option>
+                                    <mat-option value="INR">INR</mat-option>
+                                    <mat-option value="THB">THB</mat-option>
+                                    <mat-option value="AET">AET</mat-option>
+                                    <mat-option value="MVR">MVR</mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-3"></div>
+                            <div class="col-5" style="left:18px">{{formGroup.controls['amount'].value}} {{formGroup.controls['currencyType'].value}}</div>
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <label for="">Payment reason <span style="color: red;">*</span></label>                            
+                            </div>
+                            <div class="col-8">
+                                <mat-select class="icon-align placeholder-align" placeholder="Chooce payment reason" style="left: 15px;" formControlName="paymentReason">
+                                    <mat-option value="Fee Payment">Fee Payment</mat-option>
+                                    <mat-option value="Transport">Transport</mat-option>
+                                    <mat-option value="Health">Health</mat-option>
+                                    <mat-option value="Tax">Tax</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-select>
+    
+                            </div>
+                        </div>
+                <div class="row pt-4">
+                    <div class="col-11"></div>
+                    <div class="col-1">
+                        <button class="btn btn-primary next-btn" matStepperNext [disabled]="formGroup.invalid">Next</button>
+                    </div>    
+                </div>
+              </form>
+            </mat-step>
+            
+            <mat-step>
+              <ng-template matStepLabel  >Review</ng-template>
+              <div>
+
+              </div>
+              <div class="container">
+                <div class="row text-center">
+                    <div class="col-12 pb-4">
+                    Please review your payment to make sure all the details are correct.
+                </div>
+                </div>
+                <div class="row">
+                    <p><mat-icon class="text-primary" style="float: left; margin-right: 10px;">account_balance_wallet</mat-icon><b>{{formGroup.controls['pay'].value}}</b> will receive <b>{{formGroup.controls['amount'].value}} {{formGroup.controls['currencyType'].value}}</b> on today</p>
+                </div>
+              </div>
+              <div class="review-panel">
+                <div class="container">
+                    <div class="row pb-3">
+                        <div class="col-4">Execute from:</div>
+                        <div class="col-6">{{formGroup.controls['from'].value}}</div>
+                        <div class="col-2">{{formGroup.controls['amount'].value}} {{formGroup.controls['currencyType'].value}}</div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col-4">Chared by:</div>
+                        <div class="col-6">{{formGroup.controls['pay'].value}}</div>
+                        <div class="col-2">{{formGroup.controls['amount'].value}} {{formGroup.controls['currencyType'].value}}</div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col-4">Payment reason:</div>
+                        <div class="col-8">{{formGroup.controls['paymentReason'].value}}</div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col-4">Payment type:</div>
+                        <div class="col-8">{{formGroup.controls['paymentReason'].value}}</div>
+                    </div>
+                </div>
+              </div>
+              <div class="row pt-5">
+                <div class="col-6"></div>
+                <div class="col-1">
+                    <button class="btn btn-secondary" routerLink="/home">CANCEL</button>
+                </div>
+                <div class="col-4" style="position: relative; padding-left: 60px;">
+                    <button class="btn btn-secondary" matStepperPrevious>EDIT PAYMENT DETAILS</button>
+                </div>
+                <div class="col-1 submit-align">
+                <button class="btn btn-primary" (click)="submitForm()" ><span *ngIf="!isLoading">SUBMIT</span><mat-spinner *ngIf="isLoading" ></mat-spinner></button>
+                </div>    
+            </div>
+                
+            </mat-step>
+          </mat-stepper>
+          
+    </div>
+    <div class="col-4" style="overflow-y: scroll; height: 600px;">
+        <router-outlet  name="sidenav"></router-outlet>
+    </div>
+    <div>
+        <mat-sidenav #sidenav mode="over" style="width: 34%;" position="end">
+            <div class="sidenav-header">
+                <div class="py-3" style="display: flex; justify-content: end;">
+                    
+                        <span >close</span>
+                        <mat-icon style="float: right; margin-right: 10px;" (click)="sidenav.toggle()">close</mat-icon> 
+                    
+                    
+                </div>
+                <div class="py-3" >
+                    <div Style="padding-left: 20px; font-size: initial;">
+                        Choose an account to pay
+                    </div>
+                    <div class="py-3" style="display:flex">
+                        <input type="text" class="search-box" placeholder="Search accounts" #searchInput (keyup)="searchChange(searchInput)">
+                        <mat-icon style="position: relative;right: 40px;z-index: 999;top: 20px;">search</mat-icon>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <app-choose-account  [searchValue]="search" (result)= 'result($event)' ></app-choose-account>
+            </div>
+        </mat-sidenav>
+    </div>
+</div>
+</div>

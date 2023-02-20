@@ -1,0 +1,18 @@
+
+     { 
+        "current":[
+            {"name": "Abi","bank":"UHB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Durai","bank":"THB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Bala","bank":"UHB", "status":"inactive", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Chandru","bank":"THB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Elango","bank":"UHB", "status":"inactive", "latest":"", "balance":0.00, "balances":0.00 }
+        ],
+        "current1":[
+            {"name": "Abi","bank":"UHB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Durai","bank":"THB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Bala","bank":"THB", "status":"inactive", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Chandru","bank":"THB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Bala","bank":"UHB", "status":"active", "latest":"", "balance":0.00, "balances":0.00 },
+            {"name": "Elango","bank":"UHB", "status":"inactive", "latest":"", "balance":0.00, "balances":0.00 } 
+        ]
+    }

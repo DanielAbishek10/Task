@@ -1,0 +1,31 @@
+<div *ngIf="login">
+  <div class="container">
+    <div class="pos-f-t">
+      
+        <div class="p-4" style="background-color: rgb(66, 66, 173);">
+          <h4 class="title" align ="center">LOGIN PORTAL</h4>
+        </div>
+    </div>
+  <div class="col-12-md"align="center">
+      <div class="box">
+          <h2 class="txt">Login Portal</h2>
+          
+  <div class="form-group" [formGroup]="formGroup">
+    <label for="">User Name</label>
+    
+    <input type="text" class="form-control" min="1" maxlength="15" required formControlName="name">
+    <label for="">Password</label>
+    
+    <input type="password" class="form-control" minlength="4" maxlength="15" required formControlName="password">
+  <button class="btn1" (click)="message()" ><span *ngIf="!isLoading">Login</span><mat-spinner style="position: relative; left: 25px;" *ngIf="isLoading" mode="indeterminate"></mat-spinner>
+  </button>
+  </div>
+  <p>Are you a new user? <a routerLink="/register" routerLinkActive="active" >Click here</a></p>
+  </div>
+  </div>
+  <!--  -->
+</div>
+</div>
+<div *ngIf="!login" style="height: 100%;" >
+  <app-index-page></app-index-page>
+</div>

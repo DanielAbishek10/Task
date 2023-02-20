@@ -1,0 +1,122 @@
+<mat-toolbar color="primary" class="toolbar" >
+    <div>
+      <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+      <img src="#" alt="Logo">
+    </div>
+    <div>
+      <ul class="list">
+        <li><mat-icon style="margin-top: 4px;border-radius: 50%; font-size: xx-large; height: 27px; width: 30px;">person</mat-icon></li>
+        <li class="d-flex align-item-center">
+          <button mat-button [matMenuTriggerFor]="menu">{{userDetails.userName}}-{{userDetails.profileData}}<mat-icon>keyboard_arrow_down</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <span mat-menu-item>value1</span>
+            <span mat-menu-item>value2</span>
+            <span mat-menu-item>value3</span>
+          </mat-menu>
+        </li>
+        <li>
+          <mat-icon style="margin-top: 10px;" matBadge="05" routerLink="/socket" matBadgePosition="above after" matBadgeColor="warn">
+            assignment
+          </mat-icon>
+        </li>
+        <li>
+          <mat-icon style="margin-top: 10px;" matBadge="" matBadgePosition="above after" matBadgeColor="warn">
+            forum
+          </mat-icon>
+        </li>
+        <li>
+          <mat-icon style="margin-top: 10px;" matBadge="" matBadgePosition="above after" matBadgeColor="warn" routerLink="/payment">
+            assignment_turned_in
+          </mat-icon>
+        </li>
+        <li>
+  
+          <mat-icon style="margin-top: 10px;" [matBadge]="pendingApprovalCount" [hidden]="" matBadgePosition="above after" matBadgeColor="warn" (click)="[sidenav1.toggle(), setSwitch('checker')]">
+            show_chart
+          </mat-icon>
+        </li>
+        <li></li>
+      </ul>
+  
+    </div>
+  </mat-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side">
+      <h1>Menu</h1>
+  
+      <mat-list>
+        <mat-nav-list>
+  
+  
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel class="color">
+              <mat-expansion-panel-header>
+                <mat-panel-title>Hello
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+  
+              <div>
+                <ng-container>
+                  <div>
+                    <mat-nav-list>
+                      <mat-list-item>value1</mat-list-item>
+                      <mat-list-item>value2</mat-list-item>
+                      <mat-list-item>value3</mat-list-item>
+  
+                    </mat-nav-list>
+                  </div>
+                </ng-container>
+  
+  
+  
+              </div>
+  
+            </mat-expansion-panel>
+  
+  
+  
+          </mat-accordion>
+  
+  
+        </mat-nav-list>
+  
+  
+      </mat-list>
+  
+    </mat-sidenav>
+    <mat-sidenav-content class="mainBox">
+        
+      <div class="box">
+        <div style="padding-top: 25px; width: 99%; ">
+          <router-outlet></router-outlet>
+          
+        </div>
+      </div>
+  
+  
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <div>
+    <mat-sidenav #sidenav1 mode="over" style="width: 25%;" position="end">
+      <div class="sidenav-header">
+          <div class="py-3">
+              <mat-icon style="position: absolute; right: 20px; top: 10px; z-index: 1;" (click)="sidenav1.toggle()">close</mat-icon> 
+          </div>
+          
+      </div>
+      <div>
+         <span [ngSwitch]="choice">
+         <p *ngSwitchCase="'checker'">
+          <app-checker-list [paymentDetails]="paymentDetails"></app-checker-list>
+         </p>
+         <p *ngSwitchCase="false">
+          
+         </p>
+         <p *ngSwitchDefault>
+         
+         </p>
+         </span>
+      </div>
+      </mat-sidenav>
+  </div>
+  

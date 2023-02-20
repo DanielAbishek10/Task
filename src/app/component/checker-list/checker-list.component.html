@@ -1,0 +1,80 @@
+<div class="container" >
+    <h3>Pending Payments</h3>
+<div *ngFor="let item of paymentDetails" >
+    <div class="text-secondary">
+        {{item.entryTime}}
+    </div>
+    <div class="pb-3" *ngIf="item.status == 'pending'">
+        <mat-card class="example-card" >
+            <mat-card-title-group>
+                <mat-card-title class="row" ><mat-icon class="col-1 pl-2px">access_time</mat-icon><span class="col-11" style="font-size: small; bottom: 6px;">Payment batch pending for your verification</span></mat-card-title>
+            </mat-card-title-group>
+            <mat-card-content >
+                <div class="row" (click)="approvalRequest(item)">
+                    <div class="col-1"></div>
+                    <div class="col-11 pl-5">
+                        Payment is pending for your verification
+                        <div class="row ">
+                            <div class="col-12 ">Account: <span class="text-primary">{{item.pay}} -- {{item.IFSCcode}}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">From: <span class="text-primary">{{item.place}}</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">To: <span class="text-primary">{{item.pay}}</span></div>
+                        </div>
+                    </div>
+                
+                </div>
+            <div class="row" *ngIf="item.status == 'pending' && item.currentStatus == 'pending' && isChecker">
+                <div class="col-6">
+                    <button class="btn btn-danger my-2 px-4" (click)="updateStatus(item,'ignored')">REJECT</button>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-success my-2 px-4" (click)="updateStatus(item,'accepted')">VERIFY</button>
+                </div>
+            </div>
+            </mat-card-content>
+          </mat-card>
+          
+    </div>
+    <div class="pb-3" *ngIf="item.status != 'pending'">
+        <mat-card class="example-card" >
+            <mat-card-title-group *ngIf="item.status == 'accepted'">
+                <mat-card-title class="row" ><mat-icon class="col-1 pl-2px">access_time</mat-icon><span class="col-11" style="font-size: small; bottom: 6px;">Payment batch verifed and sent to bank</span></mat-card-title>
+            </mat-card-title-group>
+            
+                <mat-card-title-group *ngIf="item.status == 'ignored'">
+                    <mat-card-title class="row" ><mat-icon class="col-1 pl-2px">access_time</mat-icon><span  class="col-11" style="font-size: small; bottom: 6px;">Payment batch ignored</span></mat-card-title>
+                </mat-card-title-group>
+            <mat-card-content >
+                <div (click)="approvalRequest(item)">
+                    <div class="col-1"></div>
+                    <div class="col-11">
+                        <div *ngIf="item.status == 'accepted'">
+                            The payment has sent to the bank
+                        </div>
+                        <div *ngIf="item.status == 'ignored'">
+                            The payment was rejected
+                        </div>
+                    
+                    <div class="row ">
+                        <div class="col-12 ">Account: <span class="text-primary">{{item.pay}} -- {{item.IFSCcode}}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">From: <span class="text-primary">{{item.place}}</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">To: <span class="text-primary">{{item.pay}}</span></div>
+                    </div>
+                    </div>
+                </div>
+            
+            </mat-card-content>
+          </mat-card>
+          
+    </div>
+    
+</div>
+
+</div>

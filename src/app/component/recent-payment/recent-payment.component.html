@@ -1,0 +1,57 @@
+
+
+
+<div class="container" >
+    <h3>Recent Payments</h3>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+    <div *ngIf="!isLoading">
+
+        <div *ngFor="let item of dataSource" >
+            <div class="pb-3">
+                <mat-card class="example-card">
+                    <mat-card-title-group>
+                    </mat-card-title-group>
+                    <mat-card-content>
+                    <div class="row">
+                        <div class="col-1"><mat-icon style="border: 1px solid black; border-radius: 50%; font-size: large; padding: 2px 0 0 2px;">account_balance_wallet</mat-icon></div>
+                        <div class="col-5">{{item.entryTime}}</div>
+                        <div class="col-5 align-right text-primary"><b>{{item.amount}} {{item.currencyType}}</b></div>
+                        <div class="col-1 pl-1" (click)="copyContent(item)">
+                            <mat-icon class="text-primary">note_add</mat-icon>
+                        </div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col-12 text-primary">{{item.paymentReason}}</div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col-4">From</div>
+                        <div class="col-8 text-primary">{{item.place}}</div>
+                    </div>
+                    <div class="row py-1">
+                        <div class="col-4">To</div>
+                        <div class="col-8 text-primary">{{item.pay}}</div>
+                    </div>
+                    <div class="row py-1">
+                        <span [ngSwitch]="item.status">
+                        <p *ngSwitchCase="'accepted'">
+                        <mat-icon class="text-success icon-align">lens</mat-icon> To the bank
+                        </p>
+                        <p *ngSwitchCase="'pending'">
+                        <mat-icon class="icon-align" style="color: rgb(0, 0, 104); ">lens</mat-icon> Waiting for verification
+                        </p>
+                        <p *ngSwitchCase="'ignored'">
+                            <mat-icon class="text-danger icon-align">lens</mat-icon> Sorry, Rejected
+                        </p>
+                        <p *ngSwitchDefault>
+                        
+                        </p>
+                        </span>
+                    </div>
+                    </mat-card-content>
+                  </mat-card>
+            </div>
+            
+        </div>
+    </div>
+
+</div>

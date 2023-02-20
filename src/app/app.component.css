@@ -1,0 +1,52 @@
+.title{
+    margin-bottom: -15px;
+    margin-left: 25px;
+    color: aliceblue;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    font-size: 25px;
+
+}
+.box{
+    margin: 60px;
+        border: 2px ;
+        width: 500px;
+        height: 350px;
+        text-align: center;
+        padding: 50px;
+        background: linear-gradient(120deg, rgb(66, 66, 173), rgb(252, 252, 252)); background-attachment: fixed;
+        box-shadow: 5px 10px 500px rgb(66, 66, 173);
+        border-radius: 50px;
+}
+.btn1{
+    margin-top: 20px;
+    width: 90px;
+    height: 40px;
+    border: 0px;
+    background-color: cornflowerblue;
+    border-radius: 5px;
+    box-shadow: 5px 5px 8px rgb(66, 66, 173);
+    
+
+}
+.txt{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bolder;
+}
+::ng-deep mat-spinner,::ng-deep mat-spinner>svg{
+    width: 25px !important;
+    height: 25px !important;
+}
+::ng-deep mat-stepper-horizontal-line{
+    background-color: linear-gradient(120deg, rgb(66, 66, 173), rgb(252, 252, 252));
+}
+/* .box{
+    margin: 50px 250px;
+    border: 3px solid rgb(175, 161, 255);
+    background-color: rgb(52, 76, 95);
+    border-bottom-left-radius: 400px;
+    border-top-right-radius: 400px;
+    text-align: center;
+    text-shadow: 2px 8px 8px lightblue ;
+    color: rgb(215, 224, 252);
+} */

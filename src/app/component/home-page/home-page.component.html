@@ -1,0 +1,73 @@
+<mat-toolbar color="" class="toolbar">
+    <div>
+      <p><mat-icon>folder_open</mat-icon> Accounts</p>
+    </div>
+    <div>
+      <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span>I WANT TO</span> <i
+          class="material-icons icon">keyboard_arrow_down</i></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>content 1</button>
+        <button mat-menu-item>content 2</button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+  <mat-divider>
+  </mat-divider>
+
+
+
+  <div>
+    <mat-grid-list cols="4" gutterSize="20px" [rowHeight]="140">
+      <mat-grid-tile><a [routerLink]="[{ outlets: { inner: ['home'] } }]" routerLinkActive="active" [ngClass]="{'active': true}" class="tile">
+          <div class="d-flex align-items-center">
+
+            <i class="material-icons ">folder_open</i>
+            <span>
+              All Accounts
+            </span>
+          </div>
+        </a>
+
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <a [routerLink]="[{ outlets: { inner: ['cash'] } }]" routerLinkActive="active" class="tile">
+          <div class="d-flex align-items-center">
+
+            <i class="material-icons">account_balance</i>
+            <span>
+              Cash Accounts
+            </span>
+          </div>
+          <h2>0.00 THB</h2>
+        </a>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <a [routerLink]="[{ outlets: { inner: ['loan'] } }]" routerLinkActive="active" class="tile">
+          <div class="d-flex align-items-center">
+
+            <i class="material-icons">attach_money</i>
+            <span>
+              Bank Loan
+            </span>
+          </div>
+          <h2>0.00 THB</h2>
+        </a>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <a [routerLink]="[{ outlets: { inner: ['inverstment'] } }]" routerLinkActive="active" class="tile">
+          <div class="d-flex align-items-center">
+
+            <i class="material-icons">data_exploration</i>
+            <span>
+              Inverstment
+            </span>
+          </div>
+          <h2>0.00 THB</h2>
+        </a>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <div>
+    <router-outlet name="inner"></router-outlet>
+  </div>
+

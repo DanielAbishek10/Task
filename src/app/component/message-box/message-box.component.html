@@ -1,0 +1,105 @@
+
+
+<div *ngIf="!payment">
+    <div *ngIf="value == true">
+        <h1 mat-dialog-title style="color: green;">Success 👍 !!!</h1>
+        
+        <div mat-dialog-content>Hi {{name}}!, Your balance is {{balance}} approved</div>
+        <div mat-dialog-actions>
+            <button mat-button mat-dialog-close>Close</button>
+        </div>
+    </div>
+    <div *ngIf="value  == false">
+        <h1 mat-dialog-title style="color: red;">Sorry ☹</h1>
+        <div mat-dialog-content>Hi {{name}}!, Your balance is {{balance}} refused</div>
+        <div mat-dialog-actions>
+            <button mat-button mat-dialog-close>Close</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="payment">
+    <div *ngIf="value">
+        <div class="container">
+            <div class="row">
+                <div class="col-11"></div>
+                <div class="col-1" (click)="closeDialog()"><mat-icon>close</mat-icon></div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center"><mat-icon style="font-size: 100px; width: 100%; height: 100%; color: rgb(5, 207, 5);">check_circle_outline</mat-icon></div>
+            </div>
+            <h1 class="text-center text-primary">Success!</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-center" style="line-height: 1.8;" >
+                            Payment of {{paymentDetails.amount}}THB <br>
+                            to account {{paymentDetails.pay}} <mat-icon class="text-primary" style="position: relative; top:5px">contacts</mat-icon><br>
+                            has been sent for verification to <br>
+                            <mat-icon style=" position: relative; top: 5px; border:1px solid;border-radius: 50%; margin-right: 12px; font-size: medium; height: 20px; width: 20px;">person</mat-icon> <span class="text-primary">Multiple people</span></p>
+                    </div>
+                </div>
+            </div><div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-center">What do you want to do now?</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center pb-4">
+                        <mat-icon class="text-primary" style="position: relative;top: 5px;">insert_drive_file</mat-icon><span class="text-primary">Create template from these payment</span><mat-icon class="text-primary" style="position: relative;top: 5px;">info</mat-icon>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn text-primary" style="font-size: small;" routerLink="/payment" matDialogClose="true">Go back to Home page</button>
+                    </div>
+                    <div class="d-flex justify-content-end col-6">
+                        <button class="btn btn-light" style="font-size: small;" matDialogClose="true">MAKE ANOTHER PAYMENT</button>
+                    </div>
+                </div>
+            </div>
+            
+               
+        </div>
+    
+    </div>
+    <div *ngIf="!value">
+        <div class="container">
+            <div class="row">
+                <div class="col-11"></div>
+                <div class="col-1" (click)="closeDialog()"><mat-icon>close</mat-icon></div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center"><mat-icon style="font-size: 100px; width: 100%; height: 100%; color: rgb(194, 0, 0);">highlight_off</mat-icon></div>
+            </div>
+            <h1 class="text-center text-primary">Sorry!</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-center" >{{errorMsg}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="container" style="position: relative; top:80px">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="text-center">What do you want to do now?</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                      <button class="btn btn-light text-primary" (click)="closeDialog()" style="font-size: small;" matDialogClose="true">Go back to Payments</button>
+                    </div>
+                    <div class="d-flex justify-content-end col-6">
+                      <button class="btn btn-light" style="font-size: small;" (click)="loginPage()">Change User</button>
+                    </div>
+                  </div>
+            </div>
+            
+               
+        </div>
+    
+    </div>
+</div>

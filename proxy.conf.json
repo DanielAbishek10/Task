@@ -1,0 +1,14 @@
+{
+    "/api/*":{
+        "target":"https://c405-14-98-32-198.in.ngrok.io/",
+        "secure":false,
+        "pathRewrite":{
+            "^/api":""
+        },
+        "changeOrigin":false,
+        "logLevel":"debug"
+    },
+    "scripts":{
+        "start:proxy":"ng serve --proxy-config src/proxy.conf.json"
+      }
+}
