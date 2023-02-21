@@ -15,6 +15,7 @@ export class AppComponent {
   formGroup!:FormGroup
   constructor(private _formBuilder:FormBuilder, private paymentDetailsService$:PaymentDetailsService, private router:Router,private _snackBar:MatSnackBar){}
   ngOnInit(): void {
+    this.paymentDetailsService$.getGroupedValues('pay').subscribe(data => console.log(data))
     this.paymentDetailsService$.currentUser = {userName:'tester',profileData:'checker'}
     this.formGroup = this._formBuilder.group({
       name:[''],

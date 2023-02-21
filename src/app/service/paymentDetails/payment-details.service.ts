@@ -20,7 +20,8 @@ export class PaymentDetailsService {
   name:string = '';
   balance:number = 0;
   value: boolean = false;
-  private url = environment.apiUrl;
+  private url = 'http://127.0.0.1:3000/';
+  private groupUrl = 'http://192.168.3.123:3500/api/'
   header = new HttpHeaders().set('Content-Type', 'application/json;charset=utf-8').append('Authorization', 'Bearer')
   accDetails:any = [
 {AccountName: 'SavingsAccount', UserName: 'Reuban', AccountNo: '90f15fba-ca2b-4174-b12d-ee93e60c8a59'},
@@ -65,5 +66,8 @@ export class PaymentDetailsService {
    }
    public setTraceForPaymentNotifications(details:any):Observable<any>{
     return this.http.post(this.url + 'traceInsert',details)
+   }
+   public getGroupedValues(groupOne?:any,groupTwo?:any):Observable<any>{
+    return this.http.get(this.groupUrl + 'groupBy',{params:{groupByOne:groupOne,groupByTwo:groupTwo}})
    }
 }
