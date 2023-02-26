@@ -63,6 +63,23 @@ export class HomeComponent implements OnInit {
   
   transform(value): void{
     this.groupByColumns = this.temp.filter((item: any) => item !== value);
+
+    let params = {
+      user: this.paymentDetailsService$.accDetails.accountNo;
+      groupByOne: value
+    }
+
+
+    this.paymentDetailsService$.getTableValues(params).subscribe(colummns => {
+      this.dataSource = colummns.data;
+    })
+
+  }
+
+  getSortedData(event: any){
+    let params = {
+
+    }
     
   }
 
