@@ -42,6 +42,8 @@ export class HomeComponent implements OnInit {
     
   }
   displayedColumns: string[] = ['amount', 'from', 'to', 'ifsc', 'status'];
+  groupByColumns: string = ['From', 'To', 'IFSC', 'Status']
+  temp: string[] = ['From', 'To', 'IFSC', 'Status']
   dataSource:any = new MatTableDataSource();
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
  
@@ -50,15 +52,18 @@ export class HomeComponent implements OnInit {
  
 
   ngOnInit(): void {
+    this.groupByColumns = this.groupByColumns;
     let params = {
       user: this.paymentDetailsService$.accDetails.accountNo;
     }
     this.paymentDetailsService$.getTableValues(params).subscribe(colummns => {
       this.dataSource = colummns.data;
-    })
-    
-    
+    }) 
   } 
   
-  
+  transform(value): void{
+    this.groupByColumns = this.temp.filter((item: any) => item !== value);
+    
+  }
+
 }
