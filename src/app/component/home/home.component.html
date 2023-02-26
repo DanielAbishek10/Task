@@ -34,7 +34,7 @@
     <div class="mat-elevation-z8">
         <div *ngFor="let source of dataSource">
             <div *ngIf="source.name === 'all'"> 
-                <table mat-table [dataSource]="source.record">
+                <table mat-table [dataSource]="source.record" matSort (matSortChange)="getSortedData($event)">
 
                 <!-- Amount + currency type Column -->
                 <ng-container matColumnDef="amount">
@@ -72,7 +72,7 @@
 
               <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                              showFirstLastButtons
-                             aria-label="Select page of periodic elements">
+                             aria-label="Select page of periodic elements" (page)="getSortedData($event)">
               </mat-paginator>
             </div>
             <div ngIf="source.name !== 'all'">
@@ -82,7 +82,7 @@
                             <mat-panel-title>{{source.name}}</mat-panel-title>
                         </mat-expansion-panel-header>
 
-                        <table mat-table [dataSource]="source.record">
+                        <table mat-table [dataSource]="source.record" matSort (matSortChange)="getSortedData($event)">
 
                         <!-- Amount + currency type Column -->
                         <ng-container matColumnDef="amount">
@@ -120,7 +120,7 @@
 
                       <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                                      showFirstLastButtons
-                                     aria-label="Select page of periodic elements">
+                                     aria-label="Select page of periodic elements"  (page)="getSortedData($event)">
                       </mat-paginator>
                   </mat-expansion-panel>
                 </mat-accordian>
