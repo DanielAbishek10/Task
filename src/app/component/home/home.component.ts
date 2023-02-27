@@ -54,13 +54,17 @@ export class HomeComponent implements OnInit {
   groupByColumns: any = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time']
   groupByColumnsType: any = []
   temp: string[] = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time']
+  
   // dataSource:any = new MatTableDataSource();
   dataSource:any = []
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   public pageEvent!: PageEvent;
-  public pageIndex!: number;
-  public pageSize!: number;
+  public pageIndex: number = 0;
+  public pageSize: number = 2;
   public length!: number;
+  public columnName!: string;
+  public sorting!: string;
+  public isSorted!: boolean;
 
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -70,7 +74,13 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.groupByColumns = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time'];
     this.groupByColumnsType = []
-    let param = {
+    let param: { 
+      user?: any; 
+      cardName?: any; 
+      page_no?: any; 
+      no_of_data?: any;
+    }
+    param = {
       user: this.paymentDetailsService$.currentUser.accountNo
     }
     this.paymentDetailsService$.getTableValues(param).subscribe(colummns => {
@@ -79,6 +89,15 @@ export class HomeComponent implements OnInit {
       this.dataSource.paginator = this.paginator
       console.log(this.paginator)
     }) 
+
+    param.cardName = 'all'
+    param.no_of_data = this.pageSize
+    param.page_no = this.pageIndex * this.pageSize
+    
+
+    this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
+      this.dataSource[0].record = columns.record
+    })
   } 
   
   transform(value: any): void{
@@ -97,8 +116,8 @@ export class HomeComponent implements OnInit {
     this.paymentDetailsService$.getTableValues(param).subscribe(columns => {
       this.dataSource = columns.data
       console.log(this.dataSource)
-
     })
+
   }
 
   transformGroup(value: any){
@@ -147,17 +166,31 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent(e: any, cardName: any) {
-    this.pageEvent = e;
-    this.length = e.length;
-    this.pageSize = e.pageSize;
-    this.pageIndex = e.pageIndex;
+    if (Object.keys(e).length == 2){
+      this.columnName = e.active
+      this.sorting = e.direction
+    }else{
+      this.pageEvent = e;
+      this.length = e.length;
+      this.pageSize = e.pageSize;
+      this.pageIndex = e.pageIndex;
+    }
 
-    let param: { user: any; cardName: any; page_no: any; no_of_data: any; column_one?: any; column_two?: any};
+    let param: { 
+      user: any; 
+      cardName: any; 
+      page_no: any; 
+      no_of_data: any; 
+      column_one?: any; 
+      column_two?: any;
+      column?: any;
+      is_sorted?: any;
+    };
 
     param = {
       user: this.paymentDetailsService$.currentUser.accountNo,
       cardName: cardName,
-      page_no: this.pageIndex,
+      page_no: this.pageIndex * this.pageSize,
       no_of_data: this.pageSize
     }
     
@@ -170,14 +203,24 @@ export class HomeComponent implements OnInit {
       }
     }
 
+    if (this.sorting == 'asc'){
+      this.isSorted = false
+    }else if (this.sorting == 'desc'){
+      this.isSorted = true
+    }
+    
+    if (this.sorting && this.columnName){
+      param.is_sorted = this.isSorted
+      param.column = this.columnName
+    }
+
     this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
-      this.dataSource[0].record = columns.record
+      // this.dataSource[0].record = columns.record
       for(let i = 0; i < this.dataSource.length; i++){
         if (this.dataSource[i].name == cardName){
           this.dataSource[i].record = columns.record
         }
       }
-      // this.dataSource.record = columns.record
       console.log(this.dataSource[0])
     })
 
