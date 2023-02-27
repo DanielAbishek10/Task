@@ -7,6 +7,7 @@ import { PaymentDetailsService } from '../../service/paymentDetails/payment-deta
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageBoxComponent } from '../../component/message-box/message-box.component';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 // import { groupBy } from 'rxjs';
 
 let list:Table[]=[]
@@ -16,6 +17,10 @@ const groupBy:any = (data:any, key:any)=>{
     return x;
   },{});
 };
+interface MyObject {
+  [key: string]: any;
+  // other properties...
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -41,46 +46,140 @@ export class HomeComponent implements OnInit {
   constructor(private paymentDetailsService$: PaymentDetailsService, private _liveAnnouncer: LiveAnnouncer, private dialog:MatDialog) { 
     
   }
-  displayedColumns: string[] = ['amount', 'from', 'to', 'ifsc', 'status'];
-  groupByColumns: string = ['From', 'To', 'IFSC', 'Status']
-  temp: string[] = ['From', 'To', 'IFSC', 'Status']
-  dataSource:any = new MatTableDataSource();
+  public parameterData: any = []
+  public groupValue: string = ''
+  public groupValueType: string = ''
+  public myObj: MyObject = {'Bank': 'IFSCcode', 'From': 'place', 'Currency Type': 'currencyType', 'To': 'pay', 'Entry Time':'entryTime', 'Status':'status'}
+  displayedColumns: string[] = ['amount', 'place', 'pay', 'IFSCcode', 'status'];
+  groupByColumns: any = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time']
+  groupByColumnsType: any = []
+  temp: string[] = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time']
+  // dataSource:any = new MatTableDataSource();
+  dataSource:any = []
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
- 
+  public pageEvent!: PageEvent;
+  public pageIndex!: number;
+  public pageSize!: number;
+  public length!: number;
+
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('searchbar') searchbar!:ElementRef;
- 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
-    this.groupByColumns = this.groupByColumns;
-    let params = {
-      user: this.paymentDetailsService$.accDetails.accountNo;
+    this.groupByColumns = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time'];
+    this.groupByColumnsType = []
+    let param = {
+      user: this.paymentDetailsService$.currentUser.accountNo
     }
-    this.paymentDetailsService$.getTableValues(params).subscribe(colummns => {
+    this.paymentDetailsService$.getTableValues(param).subscribe(colummns => {
       this.dataSource = colummns.data;
+      this.length = colummns.data[0].count
+      this.dataSource.paginator = this.paginator
+      console.log(this.paginator)
     }) 
   } 
   
-  transform(value): void{
+  transform(value: any): void{
+    this.groupValue = value
+    this.groupValueType = ''
+    this.parameterData = []
+    this.parameterData.push(value)
     this.groupByColumns = this.temp.filter((item: any) => item !== value);
+    this.groupByColumnsType = this.temp.filter((item: any) => item !== value);
 
-    let params = {
-      user: this.paymentDetailsService$.accDetails.accountNo;
-      groupByOne: value
+    let param = {
+      user: this.paymentDetailsService$.currentUser.accountNo,
+      groupByOne: this.myObj[value]
     }
 
+    this.paymentDetailsService$.getTableValues(param).subscribe(columns => {
+      this.dataSource = columns.data
+      console.log(this.dataSource)
 
-    this.paymentDetailsService$.getTableValues(params).subscribe(colummns => {
-      this.dataSource = colummns.data;
+    })
+  }
+
+  transformGroup(value: any){
+    this.groupValueType = value
+    if (this.parameterData.length <= 1){
+      this.parameterData.push(value);
+    }else {
+      this.parameterData.pop()
+      this.parameterData.push(value)
+    }
+
+    let param: { user: any; groupByOne: any; groupByTwo?: any; };
+
+    if (this.parameterData.length === 1) {
+      param = {
+        user: this.paymentDetailsService$.currentUser.accountNo, 
+        groupByOne: this.myObj[value] 
+      };
+      this.groupByColumns = this.temp.filter((item: any) => item !== value);
+      this.groupByColumnsType = this.temp.filter((item: any) => item !== value);
+    } else {
+      param = { 
+        user: this.paymentDetailsService$.currentUser.accountNo,
+        groupByOne: this.myObj[this.parameterData[0]],
+        groupByTwo: this.myObj[this.parameterData[1]]
+      };
+      this.temp = this.temp.filter((item: any) => item !== this.parameterData[0]);
+      this.groupByColumns = this.temp.filter((item: any) => item !== this.parameterData[1]);
+      this.temp = this.temp.filter((item: any) => item !== this.parameterData[0]);
+      this.groupByColumnsType = this.temp.filter((item: any) => item !== this.parameterData[1]);
+    }
+
+    this.paymentDetailsService$.getTableValues(param).subscribe(columns => {
+      this.dataSource = columns.data
+      console.log(this.dataSource)
+
     })
 
   }
 
-  getSortedData(event: any){
+  getSortedData(event: any): any{
     let params = {
 
     }
-    
+    console.log(event)
   }
 
+  handlePageEvent(e: any, cardName: any) {
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+
+    let param: { user: any; cardName: any; page_no: any; no_of_data: any; column_one?: any; column_two?: any};
+
+    param = {
+      user: this.paymentDetailsService$.currentUser.accountNo,
+      cardName: cardName,
+      page_no: this.pageIndex,
+      no_of_data: this.pageSize
+    }
+    
+    for (let i = 0; i < this.parameterData.length; i++){
+      if (i == 0){
+        param.column_one = this.myObj[this.parameterData[i]]
+      }
+      if (i == 1){
+        param.column_two = this.myObj[this.parameterData[i]]
+      }
+    }
+
+    this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
+      this.dataSource[0].record = columns.record
+      for(let i = 0; i < this.dataSource.length; i++){
+        if (this.dataSource[i].name == cardName){
+          this.dataSource[i].record = columns.record
+        }
+      }
+      // this.dataSource.record = columns.record
+      console.log(this.dataSource[0])
+    })
+
+  }
 }

@@ -24,6 +24,7 @@ import { NumbersOnlyDirective } from './directive/numbers-only.directive';
 import { WebSocketComponent } from './component/web-socket/web-socket.component';
 
 
+
 @NgModule({
   declarations: [
     
@@ -52,7 +53,7 @@ import { WebSocketComponent } from './component/web-socket/web-socket.component'
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

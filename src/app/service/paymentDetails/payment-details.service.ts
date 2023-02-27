@@ -20,8 +20,9 @@ export class PaymentDetailsService {
   name:string = '';
   balance:number = 0;
   value: boolean = false;
-  private url = 'http://127.0.0.1:3000/';
+  private url = 'http://192.168.3.123:3000/';
   private groupUrl = 'http://192.168.3.123:3500/api/'
+  // private pythonUrl = ''
   header = new HttpHeaders().set('Content-Type', 'application/json;charset=utf-8').append('Authorization', 'Bearer')
   accDetails:any = [
 {AccountName: 'SavingsAccount', UserName: 'Reuban', AccountNo: '90f15fba-ca2b-4174-b12d-ee93e60c8a59'},
@@ -69,5 +70,13 @@ export class PaymentDetailsService {
    }
    public getGroupedValues(groupOne?:any,groupTwo?:any):Observable<any>{
     return this.http.get(this.groupUrl + 'groupBy',{params:{groupByOne:groupOne,groupByTwo:groupTwo}})
+   }
+
+   public getTableValues(param: any): Observable<any>{
+    return this.http.get(this.groupUrl + 'groupBy' , {params: param})
+   }
+
+   public getPaginatedValues(param: any): Observable<any>{
+    return this.http.get(this.groupUrl + 'sortData', { params: param });
    }
 }
