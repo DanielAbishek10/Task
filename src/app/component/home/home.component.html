@@ -2,23 +2,38 @@
     <div>
         <mat-toolbar color="" class="toolbar">
             <div class="d-flex align-item-center">
-                <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span><i class="material-icons" style="margin-top: 5px;">list</i></span></button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item>content 1</button>
-                  <button mat-menu-item>content 2</button>
-                </mat-menu>
-                <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span>GROUP BY TYPE </span><i class="material-icons">keyboard_arrow_down</i></button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item>content 1</button>
-                  <button mat-menu-item>content 2</button>
-                </mat-menu>
-                <button mat-button [matMenuTriggerFor]="groupBy" class="text text-primary"><span>AND GROUP BY </span><i class="material-icons">keyboard_arrow_down</i></button>
-                <mat-menu #groupBy="matMenu">
-                    <mat-option [value]="null"></mat-option>
-                    <mat-option *ngFor="let item of displayedColumns" (click)="transform(item)">
-                      {{item}}
-                    </mat-option>
-                </mat-menu>
+                <div>
+
+                    <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span><i class="material-icons" style="margin-top: 5px;">list</i></span></button>
+                    <mat-menu #menu="matMenu">
+                      <mat-option [value]="null" (click)="ngOnInit()">No Group</mat-option>
+                      <mat-option *ngFor="let item of displayedColumnsForGroupType" (click)="transform(item)">
+                        {{item | uppercase}}
+                      </mat-option>
+                    </mat-menu>
+                </div>
+
+                <div>
+
+                    <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span>GROUP BY {{groupValue | uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
+                    <mat-menu #menu="matMenu">
+                      <mat-option [value]="null"></mat-option>
+                      <mat-option *ngFor="let item of displayedColumnsForGroupType">
+                            {{item | uppercase}}
+                        </mat-option>
+                    </mat-menu>
+                </div>
+                
+                <div *ngIf="displayedColumnsForGroup.length">
+                    <button mat-button [matMenuTriggerFor]="groupBy" class="text text-primary"><span>AND GROUP BY {{groupValueType | uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
+                    <mat-menu #groupBy="matMenu" >
+                        
+                        <!-- <mat-option [value]="null"></mat-option> -->
+                        <mat-option *ngFor="let item of displayedColumnsForGroup" (click)="transformGroup(item)">
+                          {{item | uppercase}}
+                        </mat-option>
+                    </mat-menu>
+                </div>
             </div>
             <div style="color: #007bff; " class="d-flex align-item-center">
                 <input style=" width: 100%; " class="search" type="search" name="filter" (keyup)="applyFilter($event)" [(ngModel)]="searchValue" #searchbar id="filter" placeholder="Search for ******* "> THB <i class="material-icons" style="margin-top: 5px;">refresh</i>
@@ -28,86 +43,139 @@
         
         <mat-divider>
         </mat-divider>
-        <mat-accordion>
-            <mat-expansion-panel hideToggle>
-                <mat-expansion-panel-header class="head">
+        <div *ngFor="let dataSource of dataSource">
+        <div *ngIf="dataSource?.name === 'all'">
+            <table mat-table [dataSource]="dataSource.record" matSort (matSortChange)="announceSortChange($event,dataSource.name)"  class="mat-elevation-z8 ">
+
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Amount 
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.amount}} - {{element.currencyType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fromName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        From Bank
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.place}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="bank">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        To Bank
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.IFSCcode}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="toName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        To 
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.pay}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="entryTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Entry Time
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.entryTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Status 
+                    </th>
+                    <td mat-cell *matCellDef="let element" > {{element.status}} </td>
+                </ng-container>
+
+                
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{searchbar.value}}"</td>
+                  </tr>
+                  <ng-container matColumnDef="groupHeader">
+                    
+                    <td colspan="999" mat-cell *matCellDef="let groupBy"><button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === groupBy ? null : groupBy); $event.stopPropagation()">
+                        {{groupBy.group}}<mat-icon *ngIf="expandedElement !== groupBy">keyboard_arrow_down</mat-icon>
+                        <mat-icon *ngIf="expandedElement === groupBy">keyboard_arrow_up</mat-icon>
+                      </button></td>
+                  </ng-container>
+                  <td colspan="1" mat-cell *matCellDef="let group"></td>
+                  <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"></tr> 
+            
+                </table>  
+      
+            <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changepage($event, dataSource.name)" aria-label="Select page">
+            </mat-paginator>
+            <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator> -->
+        </div>
+
+        <div *ngIf="dataSource?.name !== 'all'">
+        <mat-accordion >
+            <mat-expansion-panel hideToggle >
+                <mat-expansion-panel-header class="head" >
                     <mat-panel-title>
                         <span class="d-flex align-item-center" >
                             <i class="material-icons">keyboard_arrow_down</i>
-                            CURRENT
+                            {{dataSource.name}} &nbsp;&nbsp;&nbsp;&nbsp; <b> ({{dataSource.count}}) </b>
                         </span>
                     </mat-panel-title>
-                    <div class="value">
+                    <!-- <div class="value">
                         0.00 THB
-                    </div>
+                    </div> -->
                 
                 </mat-expansion-panel-header>
                 <div class="mat-expansion-panel-body">
                     
-                    
-                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"  class="mat-elevation-z8 ">
-                    
-                    
-                        <ng-container matColumnDef="name">
+                    {{dataSource.record | json}} &nbsp;&nbsp;
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event, dataSource.name)"  class="mat-elevation-z8 ">
+
+                        <ng-container matColumnDef="amount">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-                                Name
+                                 Amount 
                             </th>
-                            <td mat-cell *matCellDef="let element" > {{element.name}} </td>
-                        </ng-container>
-                    
-                    
-                        <ng-container matColumnDef="bank">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by bank">
-                                  Bank
-                            </th>
-                            <td mat-cell *matCellDef="let element"  > <i class="material-icons" style="margin-bottom: 24px;">account_balance</i> {{element.bank}} </td>
-                        </ng-container>
-                        
-                    
-                    
-                        <ng-container matColumnDef="latest">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by latest">
-                                Latest activity
-                            </th>
-                            <td mat-cell *matCellDef="let element"> {{element.latest}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
-                                Status
-                            </th>
-                            <ng-container *matCellDef="let element">
-                                <td *ngIf="element.status=='active'; else elseTemplate" class="d-flex align-item-center"><i class="material-icons" style="color: green; font-size: medium; margin-bottom: 24px;">fiber_manual_record</i>active</td>
-                            
-                            </ng-container>
-                                <ng-template #elseTemplate>
-                                    <td class="d-flex align-item-center"><i class="material-icons" style="color: red; font-size: medium; margin-bottom: 24px;">fiber_manual_record</i>inactive</td>
-                                </ng-template>
-                        </ng-container>
-                    
-                        
-                        <ng-container matColumnDef="balance">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balance">
-                                Balance
-                            </th>
-                            <td mat-cell *matCellDef="let element"> {{element.balance}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="balances">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by balances">
-                                Balances(thb)
-                            </th>
-                            <td mat-cell *matCellDef="let element"> {{element.balances}} </td>
+                            <td mat-cell *matCellDef="let element" > {{element.amount}} - {{element.currencyType}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef >
-                                Actions
+                        <ng-container matColumnDef="fromName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                                From Bank
                             </th>
-                            <td mat-cell *matCellDef="let element" > 
-                                <button mat-mini-fab style="margin: 4px;" (click)="showpopup(element.name,element.balance,true)"><mat-icon>done</mat-icon></button>
-                                <button mat-mini-fab style="margin: 4px;" (click)="showpopup(element.name,element.balance, false)"><mat-icon>close</mat-icon></button>
-                                
-                            </td>
+                            <td mat-cell *matCellDef="let element" > {{element.place}} </td>
                         </ng-container>
+
+                        <ng-container matColumnDef="bank">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                                To Bank
+                            </th>
+                            <td mat-cell *matCellDef="let element" > {{element.IFSCcode}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="toName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                                To 
+                            </th>
+                            <td mat-cell *matCellDef="let element" > {{element.pay}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="entryTime">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                                Entry Time
+                            </th>
+                            <td mat-cell *matCellDef="let element" > {{element.entryTime}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                                Status 
+                            </th>
+                            <td mat-cell *matCellDef="let element" > {{element.status}} </td>
+                        </ng-container>
+
+                        
                     
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -116,17 +184,18 @@
                           </tr>
                           <ng-container matColumnDef="groupHeader">
                             
-                            <td colspan="999" mat-cell *matCellDef="let groupBy"><button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === groupBy ? null : groupBy); $event.stopPropagation()">
-                                {{groupBy.group}}<mat-icon *ngIf="expandedElement !== groupBy">keyboard_arrow_down</mat-icon>
-                                <mat-icon *ngIf="expandedElement === groupBy">keyboard_arrow_up</mat-icon>
-                              </button></td>
+                           
                           </ng-container>
                           <td colspan="1" mat-cell *matCellDef="let group"></td>
                           <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"></tr>
-                          
-                    </table>  
+                        </table>  
+            
+                    <mat-paginator #paginator [length]="dataSource.count" [pageIndex]="currentPage" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changepage($event, dataSource.name)" aria-label="Select page" showFirstLastButtons="true">
+                    </mat-paginator>
                 </div>      
             </mat-expansion-panel>
-        </mat-accordion>
+        </mat-accordion> 
+    </div>
 
+        </div>
     </div>

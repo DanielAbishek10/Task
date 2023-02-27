@@ -22,6 +22,8 @@ import { CheckerPageComponent } from './component/checker-page/checker-page.comp
 import { CheckerListComponent } from './component/checker-list/checker-list.component';
 import { NumbersOnlyDirective } from './directive/numbers-only.directive';
 import { WebSocketComponent } from './component/web-socket/web-socket.component';
+import { MatSortModule } from '@angular/material/sort';
+
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import { WebSocketComponent } from './component/web-socket/web-socket.component'
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    MatSortModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

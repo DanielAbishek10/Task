@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { MatTableDataSource } from "@angular/material/table";
@@ -7,6 +7,8 @@ import { PaymentDetailsService } from '../../service/paymentDetails/payment-deta
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageBoxComponent } from '../../component/message-box/message-box.component';
+import { MatPaginator } from '@angular/material/paginator';
+
 // import { groupBy } from 'rxjs';
 let list:Table[]=[]
 const groupBy:any = (data:any, key:any)=>{
@@ -15,6 +17,11 @@ const groupBy:any = (data:any, key:any)=>{
     return x;
   },{});
 };
+
+interface MyObject {
+  [key: string]: any;
+  // other properties...
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -27,7 +34,7 @@ const groupBy:any = (data:any, key:any)=>{
     ]),
   ],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnChanges {
   
   
   panelOpenState = false;
@@ -36,15 +43,32 @@ export class HomeComponent implements OnInit {
   reducedGroups:any = [];
   initialData!:any[];
   popup = false;
+  totalRows = 3;
+  pageSize = 1;
+  currentPage = 1;
+  pageSizeOptions: number[] = [2, 4, 6, 8];
   public searchValue:string ='';
+  public titleList: any
+  public valueList: any
+  public finalList: any = []
+  public finalData: any = []
+  public dummyData : any
   constructor(private paymentDetailsService$: PaymentDetailsService, private _liveAnnouncer: LiveAnnouncer, private dialog:MatDialog) { 
     // let inputData = list;
     // if(!this.initData(inputData)) return;
     // this.buildDataSource()
     
   }
-  displayedColumns: string[] = ['name', 'bank', 'latest', 'status', 'balance','balances', 'actions'];
-  dataSource:any = new MatTableDataSource(list = this.paymentDetailsService$.list);
+  public groupValue = 'TYPE'
+  public groupValueType = ''
+  public parameterData: any = []
+  public myObj: MyObject = {'Bank': 'IFSCcode', 'Currency Type': 'currencyType', 'To': 'pay', 'Entry Time':'entryTime', 'Status':'status'}
+  displayedColumns: string[] = ['amount','fromName','bank','toName','entryTime','status'];
+  public displayedColumnsForGroupType: string[] = ['Bank', 'Currency Type', 'To', 'Entry Time', 'Status']
+  public checkingvar: string[] = ['Bank', 'Currency Type', 'To', 'Entry Time', 'Status']
+  public displayedColumnsForGroup: string[] = []
+  // dataSource:any = new MatTableDataSource(list = this.paymentDetailsService$.list);
+  dataSource:any 
   datasource:any =[]
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   expandedElement!: Table | null;
@@ -54,19 +78,46 @@ export class HomeComponent implements OnInit {
     // this.dataSource.filterPredicate = function (record,filter) {
     //   return record.name.toLocaleLowerCase() == filter.toLocaleLowerCase();
     // }
-    
-    
+    this.groupValue = 'TYPE'
+    this.getTypes()  
+    console.log('k')  
+    this.displayedColumnsForGroup = []
+    this.displayedColumnsForGroupType = this.checkingvar
   }
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('searchbar') searchbar!:ElementRef;
+  @ViewChild(MatPaginator) paginator!: MatPaginator
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
   }
 
   /** Announce the change in sort state for assistive technology. */
-  announceSortChange(sortState:Sort) {
+  announceSortChange(sortState:Sort, cardName: string): void {
+    console.log(sortState, cardName)
+    if(sortState.direction == 'asc'){
+      var isSorted = false
+    }else{
+      var isSorted = true
+    }
+
+    let params = {
+      cardName: cardName,
+      column: sortState.active,
+      page_no: '',
+      no_of_data: '',
+      is_sorted: isSorted
+    }
+    // this.dataSource.paginator = this.paginator
     
+    this.dataSource.sort = this.sort;
+
+    this.dataSource.paginator = this.paginator;
+
+
+
+
+
     // if (sortState.active && sortState.direction) {
     //   this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     //   console.log(sortState);
@@ -182,20 +233,77 @@ applyFilter(event:any){
   isGroup(index:any,item:any):boolean{
     return item.isGroupBy;
   }
-  transform(value:string){
-    var name = groupBy(this.paymentDetailsService$.list,value);
-    this.datasource =[]
-    Object.keys(name).forEach(key =>{
-      this.datasource.push({group: key, isGroupBy:true});
-      let value = name[key];
-      value.forEach((element:any) => {
-        this.datasource.push(element)
-      });
-    });
+  transform(value: string){
+    this.groupValue = value
+    // console.log('INSIDE')
+    // var name = groupBy(this.paymentDetailsService$.list,value);
+    // this.datasource =[]
+    // Object.keys(name).forEach(key =>{
+    //   this.datasource.push({group: key, isGroupBy:true});
+    //   let value = name[key];
+    //   value.forEach((element:any) => {
+    //     this.datasource.push(element)
+    //   });
+    // });
+    // let temp = this.displayedColumnsForGroup
+    this.parameterData =[]
+    this.parameterData.push(value)
+    let param = {
+      user: this.paymentDetailsService$.currentUser.accountNo,
+      groupByOne: this.myObj[value]
+    }
     
 
-    this.dataSource.data = this.datasource
+    this.paymentDetailsService$.getPaymentDetails(param).subscribe(columns => {
+      
+      this.dataSource = new MatTableDataSource(columns.data)
+      this.dataSource = this.dataSource.data
+      console.log(this.dataSource)
+
+    })
+    this.displayedColumnsForGroupType = this.checkingvar.filter(num => num !== value)
+    this.displayedColumnsForGroup = this.checkingvar.filter(num => num !== value);
   }
+
+  transformGroup(value: any){
+    this.groupValueType = value
+    if (this.parameterData.length <= 1){
+      this.parameterData.push(value);
+    }else{
+      this.parameterData.pop()
+      this.parameterData.push(value)
+    }
+
+    let param: { user: any; groupByOne: any; groupByTwo?: any; };
+
+    if (this.parameterData.length === 1) {
+      param = { user: this.paymentDetailsService$.currentUser.accountNo, groupByOne: this.myObj[value] };
+      this.displayedColumnsForGroupType = this.checkingvar.filter(num => num !== value)
+      this.displayedColumnsForGroup = this.checkingvar.filter(num => num !== value);
+    } else {
+      param = { 
+        user: this.paymentDetailsService$.currentUser.accountNo,
+        groupByOne: this.myObj[this.parameterData[0]],
+        groupByTwo: this.myObj[this.parameterData[1]]
+      };
+      console.log(param)
+      this.displayedColumnsForGroupType = this.checkingvar.filter(num => num !== this.parameterData[0])
+      this.displayedColumnsForGroupType = this.checkingvar.filter(num => num !== this.parameterData[1])
+      this.displayedColumnsForGroup = this.checkingvar.filter(num => num !== this.parameterData[0]);
+      this.displayedColumnsForGroup = this.checkingvar.filter(num => num !== this.parameterData[1]);
+    }
+
+    this.paymentDetailsService$.getPaymentDetails(param).subscribe(columns => {
+      
+      this.dataSource = new MatTableDataSource(columns.data)
+      this.dataSource = this.dataSource.data
+      console.log(this.dataSource)
+  
+      })
+
+
+  }
+
   showpopup(name:string,balance:number,value:boolean){
     
       // alert("Hi " + name + "!, Your balance is " + balance + " is Approved")
@@ -205,7 +313,44 @@ applyFilter(event:any){
       this.popup = true
       this.dialog.open(MessageBoxComponent);
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      console.log(changes)
+  }
   
+  getTypes(){
+    let params = {
+      user: this.paymentDetailsService$.currentUser.accountNo
+    }
+    this.paymentDetailsService$.getPaymentDetails(params).subscribe(columns => {
+      
+    
+      this.dataSource = new MatTableDataSource(columns.data)
+      this.dataSource = this.dataSource.data
+      console.log(this.dataSource.data)
+
+    })
+
+    
+  }
+
   
-  
+
+  changepage(event: any, cardName: any) {
+    var param: any
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    param = {
+      user: this.paymentDetailsService$.currentUser.accountNo,
+      cardName: cardName,
+      no_of_data: this.pageSize,
+      page_no: this.currentPage * this.pageSize
+    };
+    // this.param['page_no'] = this.currentPage * this.pageSize;
+    console.log('Params==>',param)
+    this.paymentDetailsService$.getSortedValue(param).subscribe(data =>{
+      this.dataSource.data = data.record
+      console.log(this.dataSource.data)
+    })
+  }
 }

@@ -78,5 +78,6 @@ th.mat-sort-header-sorted {
     border: 1px solid green;
     border-radius: 20px;
 }
-
-  
+/* .mat-header-cell{
+    display: none;
+} */
