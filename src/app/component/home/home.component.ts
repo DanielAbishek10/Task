@@ -8,6 +8,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatDialog } from '@angular/material/dialog';
 import { MessageBoxComponent } from '../../component/message-box/message-box.component';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
 // import { groupBy } from 'rxjs';
 
 let list:Table[]=[]
@@ -73,6 +74,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
+    this.pageIndex = 0
     this.groupByColumns = ['From', 'To', 'Bank', 'Status', 'Currency Type', 'Entry Time'];
     this.groupByColumnsType = []
     let param: { 
@@ -84,21 +86,23 @@ export class HomeComponent implements OnInit {
     param = {
       user: this.paymentDetailsService$.currentUser.accountNo
     }
+
     this.paymentDetailsService$.getTableValues(param).subscribe(colummns => {
       this.dataSource = colummns.data;
       this.length = colummns.data[0].count
       this.dataSource.paginator = this.paginator
       console.log(this.paginator)
+      
+      param.cardName = 'all'
+      param.no_of_data = this.pageSize
+      param.page_no = this.pageIndex * this.pageSize
+      this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
+        this.dataSource[0].record = columns.record
+      })
     }) 
 
-    param.cardName = 'all'
-    param.no_of_data = this.pageSize
-    param.page_no = this.pageIndex * this.pageSize
     
 
-    this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
-      this.dataSource[0].record = columns.record
-    })
   } 
   
   transform(value: any): void{
@@ -166,6 +170,7 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent(e: any, cardName: any) {
+    this.pageIndex = 0
     if (Object.keys(e).length == 2){
       this.columnName = e.active
       this.sorting = e.direction
@@ -231,7 +236,7 @@ export class HomeComponent implements OnInit {
   }
 
   onPanelOpened(cardName: string){
-
+    this.pageIndex = 0
     let param: { 
       user?: any; 
       cardName?: any; 
