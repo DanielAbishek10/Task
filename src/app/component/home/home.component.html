@@ -1,151 +1,151 @@
+<div>
+  <mat-toolbar color="" class="toolbar">
+    <div class="d-flex align-item-center">
+      <div>
+        <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span><i class="material-icons"
+              style="margin-top: 5px;">list</i></span></button>
+        <mat-menu #menu="matMenu">
+          <mat-option [value]="null" (click)="ngOnInit()">No Group</mat-option>
+          <mat-option *ngFor="let item of groupByColumns" (click)="transform(item)">
+            {{item | uppercase}}
+          </mat-option>
+        </mat-menu>
+      </div>
 
-    <div>
-      <mat-toolbar color="" class="toolbar">
-        <div class="d-flex align-item-center">
-            <div>
-                <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span><i class="material-icons" style="margin-top: 5px;">list</i></span></button>
-                <mat-menu #menu="matMenu">
-                  <mat-option [value]="null" (click)="ngOnInit()">No Group</mat-option>
-                  <mat-option *ngFor="let item of groupByColumns" (click)="transform(item)">
-                    {{item | uppercase}}
-                  </mat-option>
-                </mat-menu>
-            </div>
+      <div>
+        <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span>GROUP BY {{groupValue |
+            uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
+        <mat-menu #menu="matMenu">
+          <mat-option [value]="null"></mat-option>
+          <mat-option *ngFor="let item of groupByColumns">
+            {{item | uppercase}}
+          </mat-option>
+        </mat-menu>
+      </div>
 
-            <div>
-                <button mat-button [matMenuTriggerFor]="menu" class="text text-primary"><span>GROUP BY {{groupValue | uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
-                <mat-menu #menu="matMenu">
-                  <mat-option [value]="null"></mat-option>
-                  <mat-option *ngFor="let item of groupByColumns">
-                        {{item | uppercase}}
-                    </mat-option>
-                </mat-menu>
-            </div>
-            
-            <div *ngIf="groupByColumnsType.length">
-                <button mat-button [matMenuTriggerFor]="groupBy" class="text text-primary"><span>AND GROUP BY {{groupValueType | uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
-                <mat-menu #groupBy="matMenu" >
-                    <!-- <mat-option [value]="null"></mat-option> -->
-                    <mat-option *ngFor="let item of groupByColumnsType" (click)="transformGroup(item)">
-                      {{item | uppercase}}
-                    </mat-option>
-                </mat-menu>
-            </div>
-        </div>
-        <!-- <div style="color: #007bff; " class="d-flex align-item-center">
+      <div *ngIf="groupByColumnsType.length">
+        <button mat-button [matMenuTriggerFor]="groupBy" class="text text-primary"><span>AND GROUP BY {{groupValueType |
+            uppercase}} </span><i class="material-icons">keyboard_arrow_down</i></button>
+        <mat-menu #groupBy="matMenu">
+          <!-- <mat-option [value]="null"></mat-option> -->
+          <mat-option *ngFor="let item of groupByColumnsType" (click)="transformGroup(item)">
+            {{item | uppercase}}
+          </mat-option>
+        </mat-menu>
+      </div>
+    </div>
+    <!-- <div style="color: #007bff; " class="d-flex align-item-center">
             <input style=" width: 100%; " class="search" type="search" name="filter" (keyup)="applyFilter($event)" [(ngModel)]="searchValue" #searchbar id="filter" placeholder="Search for ******* "> THB <i class="material-icons" style="margin-top: 5px;">refresh</i>
         </div>  -->
-    </mat-toolbar>
-        
-        
-        <mat-divider>
-        </mat-divider>
+  </mat-toolbar>
+
+
+  <mat-divider>
+  </mat-divider>
 
 
 
-    <div class="mat-elevation-z8">
-        <div *ngFor="let source of dataSource">
-            <div *ngIf="source['name'] === 'all'"> 
-                <table mat-table [dataSource]="source.record" matSort matSortActive="created" (matSortChange)="handlePageEvent($event, source.name)"  class="mat-elevation-z8">
+  <div class="mat-elevation-z8">
+    <div *ngFor="let source of dataSource">
+      <div *ngIf="source['name'] === 'all'">
+        <table mat-table [dataSource]="source.record" matSort matSortActive="created"
+          (matSortChange)="handlePageEvent($event, source.name)" class="mat-elevation-z8">
 
-                <!-- Amount + currency type Column -->
-                <ng-container matColumnDef="amount">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-                  <td mat-cell *matCellDef="let element"> {{element.amount}} - {{element.currencyType}} </td>
-                </ng-container>
+          <!-- Amount + currency type Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.amount}} - {{element.currencyType}} </td>
+          </ng-container>
 
-                <!-- From Name (Place) Column -->
-                <ng-container matColumnDef="place">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> From </th>
-                  <td mat-cell *matCellDef="let element"> {{element.place}} </td>
-                </ng-container>
+          <!-- From Name (Place) Column -->
+          <ng-container matColumnDef="place">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> From </th>
+            <td mat-cell *matCellDef="let element"> {{element.place}} </td>
+          </ng-container>
 
-                <!-- To (pay) Column -->
-                <ng-container matColumnDef="pay">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> To </th>
-                  <td mat-cell *matCellDef="let element"> {{element.pay}} </td>
-                </ng-container>
+          <!-- To (pay) Column -->
+          <ng-container matColumnDef="pay">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> To </th>
+            <td mat-cell *matCellDef="let element"> {{element.pay}} </td>
+          </ng-container>
 
-                <!-- From IFSC Column -->
-                <ng-container matColumnDef="IFSCcode">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> IFSC </th>
-                  <td mat-cell *matCellDef="let element"> {{element.IFSCcode}} </td>
-                </ng-container>
+          <!-- From IFSC Column -->
+          <ng-container matColumnDef="IFSCcode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> IFSC </th>
+            <td mat-cell *matCellDef="let element"> {{element.IFSCcode}} </td>
+          </ng-container>
 
-                <!-- Status Column -->
-                <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                  <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-                </ng-container>
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+          </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-              </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
 
-              <mat-paginator [pageSizeOptions]="[2, 5, 10, 20]" 
-                              [length]="source.count"
-                             showFirstLastButtons
-                             aria-label="Select page of periodic elements" (page)="handlePageEvent($event, source.name)">
-              </mat-paginator>
-            </div>
+        <mat-paginator [pageSizeOptions]="[2, 5, 10, 20]" [length]="source.count" showFirstLastButtons
+          aria-label="Select page of periodic elements" (page)="handlePageEvent($event, source.name)">
+        </mat-paginator>
+      </div>
 
-            <div *ngIf="source.name !== 'all'">
-                <mat-accordion>
-                  <mat-expansion-panel>
-                      <mat-expansion-panel-header>
-                          <mat-panel-title> 
-                            {{source.name}} &nbsp;&nbsp;&nbsp;&nbsp; <b> ({{source.count}}) </b>
-                          </mat-panel-title>
-                      </mat-expansion-panel-header>
+      <div *ngIf="source.name !== 'all'">
+        <!-- <mat-accordion> -->
+          <mat-expansion-panel (opened)="onPanelOpened(source.name)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{source.name}} &nbsp;&nbsp;&nbsp;&nbsp; <b> ({{source.count}}) </b>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-                      <table mat-table [dataSource]="source.record" matSort (matSortChange)="handlePageEvent($event, source.name)" class="mat-elevation-z8">
+            <table mat-table [dataSource]="source.record" matSort (matSortChange)="handlePageEvent($event, source.name)"
+              class="mat-elevation-z8">
 
-                      <!-- Amount + currency type Column -->
-                      <ng-container matColumnDef="amount">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-                        <td mat-cell *matCellDef="let element"> {{element.amount}} - {{element.currencyType}} </td>
-                      </ng-container>
+              <!-- Amount + currency type Column -->
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+                <td mat-cell *matCellDef="let element"> {{element.amount}} - {{element.currencyType}} </td>
+              </ng-container>
 
-                      <!-- From Name (Place) Column -->
-                      <ng-container matColumnDef="place">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> From </th>
-                        <td mat-cell *matCellDef="let element"> {{element.place}} </td>
-                      </ng-container>
+              <!-- From Name (Place) Column -->
+              <ng-container matColumnDef="place">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> From </th>
+                <td mat-cell *matCellDef="let element"> {{element.place}} </td>
+              </ng-container>
 
-                      <!-- To (pay) Column -->
-                      <ng-container matColumnDef="pay">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> To </th>
-                        <td mat-cell *matCellDef="let element"> {{element.pay}} </td>
-                      </ng-container>
+              <!-- To (pay) Column -->
+              <ng-container matColumnDef="pay">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> To </th>
+                <td mat-cell *matCellDef="let element"> {{element.pay}} </td>
+              </ng-container>
 
-                      <!-- From IFSC Column -->
-                      <ng-container matColumnDef="IFSCcode">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> IFSC </th>
-                        <td mat-cell *matCellDef="let element"> {{element.IFSCcode}} </td>
-                      </ng-container>
+              <!-- From IFSC Column -->
+              <ng-container matColumnDef="IFSCcode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> IFSC </th>
+                <td mat-cell *matCellDef="let element"> {{element.IFSCcode}} </td>
+              </ng-container>
 
-                      <!-- Status Column -->
-                      <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-                      </ng-container>
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+              </ng-container>
 
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
 
-                    <mat-paginator [pageSizeOptions]="[2, 5, 10, 20]"
-                                    [length]="source.count"
-                                   showFirstLastButtons
-                                   aria-label="Select page of periodic elements"  (page)="handlePageEvent($event, source.name)">
-                    </mat-paginator>
-                </mat-expansion-panel>
-                </mat-accordion>
-            </div> 
-        </div>
+            <mat-paginator [pageSizeOptions]="[2, 5, 10, 20]" [length]="source.count" showFirstLastButtons
+              aria-label="Select page of periodic elements" (page)="handlePageEvent($event, source.name)">
+            </mat-paginator>
+          </mat-expansion-panel>
+        <!-- </mat-accordion> -->
+      </div>
     </div>
+  </div>
 
 
 
 
-    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { MatTableDataSource } from "@angular/material/table";
@@ -37,7 +37,8 @@ export class HomeComponent implements OnInit {
   
   
   panelOpenState = false;
-  groupingColumn:any;
+  @ Input() groupingColumn!: any;
+  @ Input() groupingColumnType!: any;
   showTabel =true
   reducedGroups:any = [];
   initialData!:any[];
@@ -66,7 +67,7 @@ export class HomeComponent implements OnInit {
   public sorting!: string;
   public isSorted!: boolean;
 
-
+  @Input() cardName$!: string;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('searchbar') searchbar!:ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -117,7 +118,6 @@ export class HomeComponent implements OnInit {
       this.dataSource = columns.data
       console.log(this.dataSource)
     })
-
   }
 
   transformGroup(value: any){
@@ -224,5 +224,46 @@ export class HomeComponent implements OnInit {
       console.log(this.dataSource[0])
     })
 
+  }
+
+  ngAfterViewInit(){
+    console.log('Hey')
+  }
+
+  onPanelOpened(cardName: string){
+
+    let param: { 
+      user?: any; 
+      cardName?: any; 
+      page_no?: any; 
+      no_of_data?: any;
+      column?: any;
+      column_one?: any;
+      column_two?: any;
+    }
+    param = {
+      user: this.paymentDetailsService$.currentUser.accountNo,
+      cardName: cardName,
+      page_no: this.pageIndex * this.pageSize,
+      no_of_data: this.pageSize
+    }
+
+    for(let i = 0; i < this.parameterData.length; i++){
+      if (i == 0){
+        param.column_one = this.myObj[this.parameterData[i]]
+      }
+      if (i == 1){
+        param.column_two = this.myObj[this.parameterData[i]]
+      }
+    }
+
+    this.paymentDetailsService$.getPaginatedValues(param).subscribe(columns => {
+      for(let i = 0; i < this.dataSource.length; i++){
+        if (this.dataSource[i].name == cardName){
+          this.dataSource[i].record = columns.record
+        }
+      }
+      console.log(this.dataSource[0])
+    })
   }
 }

@@ -8,5 +8,4 @@ export interface SortParams{
     column_two: string;
     column: string;
     is_sorted: boolean;
- 
 } 
